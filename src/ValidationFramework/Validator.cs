@@ -138,37 +138,6 @@ namespace ValidationFramework
             yield break;
         }
 
-        private void OnCacheItemAdded(CacheItemAddedEventArgs<T> eventArgs)
-        {
-            CacheItemAdded?.Invoke(
-                sender: this,
-                e: new CacheItemAddedEventArgs<T>(
-                    cacheKey: eventArgs.CacheKey,
-                    originalValue: eventArgs.OriginalValue,
-                    valid: eventArgs.Valid,
-                    validation: eventArgs.Validation));
-        }
-
-        private void OnCacheItemUsed(CacheItemUsedEventArgs<T> eventArgs)
-        {
-            CacheItemUsed?.Invoke(
-                sender: this,
-                e: new CacheItemUsedEventArgs<T>(
-                    cacheKey: eventArgs.CacheKey,
-                    originalValue: eventArgs.OriginalValue,
-                    valid: eventArgs.Valid,
-                    validation: eventArgs.Validation));
-        }
-
-        private ValidationResponse CreateValidationResponse(bool valid, AbstractValidation<T> validation, T value)
-        {
-            return new ValidationResponse(
-                type: valid ? ValidationResponseType.Success : ValidationResponseType.Error,
-                name: validation.Name,
-                message: valid ? validation.MessageOnSuccess : validation.MessageOnError,
-                originalValue: validation.OriginalValue(arg: value));
-        }
-
         /// <inheritdoc />
         public void AddValidation(AbstractValidation<T> validation)
         {
@@ -212,5 +181,36 @@ namespace ValidationFramework
         {
             _validations.Clear();
         }
+
+        private void OnCacheItemAdded(CacheItemAddedEventArgs<T> eventArgs)
+        {
+            CacheItemAdded?.Invoke(
+                sender: this,
+                e: new CacheItemAddedEventArgs<T>(
+                    cacheKey: eventArgs.CacheKey,
+                    originalValue: eventArgs.OriginalValue,
+                    valid: eventArgs.Valid,
+                    validation: eventArgs.Validation));
+        }
+
+        private void OnCacheItemUsed(CacheItemUsedEventArgs<T> eventArgs)
+        {
+            CacheItemUsed?.Invoke(
+                sender: this,
+                e: new CacheItemUsedEventArgs<T>(
+                    cacheKey: eventArgs.CacheKey,
+                    originalValue: eventArgs.OriginalValue,
+                    valid: eventArgs.Valid,
+                    validation: eventArgs.Validation));
+        }
+
+        private ValidationResponse CreateValidationResponse(bool valid, AbstractValidation<T> validation, T value)
+        {
+            return new ValidationResponse(
+                type: valid ? ValidationResponseType.Success : ValidationResponseType.Error,
+                name: validation.Name,
+                message: valid ? validation.MessageOnSuccess : validation.MessageOnError,
+                originalValue: validation.OriginalValue(arg: value));
+        }        
     }
 }
