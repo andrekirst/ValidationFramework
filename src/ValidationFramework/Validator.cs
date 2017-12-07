@@ -27,6 +27,9 @@ namespace ValidationFramework
         protected Dictionary<string, bool> Cache { get; set; } = new Dictionary<string, bool>();
 
         /// <inheritdoc />
+        public bool ReturnOnlyErrors { get; set; } = false;
+
+        /// <inheritdoc />
         public IEnumerable<ValidationResponse> Validate(T value)
         {
             return Validate(
@@ -76,10 +79,20 @@ namespace ValidationFramework
                 {
                     bool valid = validation.IsValid(value: value);
 
-                    yield return CreateValidationResponse(
-                        valid: valid,
-                        validation: validation,
-                        value: value);
+                    if (!valid && ReturnOnlyErrors)
+                    {
+                        yield return CreateValidationResponse(
+                            valid: valid,
+                            validation: validation,
+                            value: value);
+                    }
+                    else if (!ReturnOnlyErrors)
+                    {
+                        yield return CreateValidationResponse(
+                            valid: valid,
+                            validation: validation,
+                            value: value);
+                    }
                 }
                 else
                 {
@@ -89,10 +102,20 @@ namespace ValidationFramework
                     {
                         bool valid = validation.IsValid(value: value);
 
-                        yield return CreateValidationResponse(
-                            valid: valid,
-                            validation: validation,
-                            value: value);
+                        if (!valid && ReturnOnlyErrors)
+                        {
+                            yield return CreateValidationResponse(
+                                                valid: valid,
+                                                validation: validation,
+                                                value: value);
+                        }
+                        else if (!ReturnOnlyErrors)
+                        {
+                            yield return CreateValidationResponse(
+                                                valid: valid,
+                                                validation: validation,
+                                                value: value);
+                        }
                     }
                     else
                     {
@@ -104,32 +127,64 @@ namespace ValidationFramework
                         {
                             bool valid = Cache[key: cacheKey];
 
-                            OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
-                                cacheKey: cacheKey,
-                                originalValue: originalValue,
-                                valid: valid,
-                                validation: validation));
+                            if (!valid && ReturnOnlyErrors)
+                            {
+                                OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
+                                                        cacheKey: cacheKey,
+                                                        originalValue: originalValue,
+                                                        valid: valid,
+                                                        validation: validation));
 
-                            yield return CreateValidationResponse(
-                                valid: valid,
-                                validation: validation,
-                                value: value);
+                                yield return CreateValidationResponse(
+                                    valid: valid,
+                                    validation: validation,
+                                    value: value);
+                            }
+                            else if (!ReturnOnlyErrors)
+                            {
+                                OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
+                                                        cacheKey: cacheKey,
+                                                        originalValue: originalValue,
+                                                        valid: valid,
+                                                        validation: validation));
+
+                                yield return CreateValidationResponse(
+                                    valid: valid,
+                                    validation: validation,
+                                    value: value);
+                            }
                         }
                         else
                         {
                             bool valid = validation.IsValid(value: value);
                             Cache.Add(key: cacheKey, value: valid);
 
-                            OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
-                                cacheKey: cacheKey,
-                                originalValue: originalValue,
-                                valid: valid,
-                                validation: validation));
+                            if (!valid && ReturnOnlyErrors)
+                            {
+                                OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
+                                                        cacheKey: cacheKey,
+                                                        originalValue: originalValue,
+                                                        valid: valid,
+                                                        validation: validation));
 
-                            yield return CreateValidationResponse(
-                                valid: valid,
-                                validation: validation,
-                                value: value);
+                                yield return CreateValidationResponse(
+                                    valid: valid,
+                                    validation: validation,
+                                    value: value);
+                            }
+                            else if (!ReturnOnlyErrors)
+                            {
+                                OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
+                                                        cacheKey: cacheKey,
+                                                        originalValue: originalValue,
+                                                        valid: valid,
+                                                        validation: validation));
+
+                                yield return CreateValidationResponse(
+                                    valid: valid,
+                                    validation: validation,
+                                    value: value);
+                            }
                         }
                     }
                 }
@@ -211,6 +266,6 @@ namespace ValidationFramework
                 name: validation.Name,
                 message: valid ? validation.MessageOnSuccess : validation.MessageOnError,
                 originalValue: validation.OriginalValue(arg: value));
-        }        
+        }
     }
 }
