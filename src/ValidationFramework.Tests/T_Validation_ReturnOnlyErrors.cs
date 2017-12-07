@@ -19,76 +19,29 @@ namespace ValidationFramework.Tests
                 originalValue: (i) => i,
                 validationFunction: (i) => i < 5);
 
-        [Fact]
-        [Trait(name: "Issue", value: "1")]
-        public void ReturnOnlyError_true_Erwarte_1_Eintrag_von_2_Validierungen_EnableCaching_false()
+        [Theory]
+        [Trait(name: "Issue", value: "2")]
+        [InlineData(true, false, 3, 1)]
+        [InlineData(true, true, 3, 1)]
+        [InlineData(false, false, 3, 2)]
+        [InlineData(false, true, 3, 2)]
+        [InlineData(true, false, 6, 2)]
+        [InlineData(true, true, 6, 2)]
+        [InlineData(false, false, 6, 2)]
+        [InlineData(false, true, 6, 2)]
+        public void Test_ReturnOnlyErrors_2_Validierungen(bool returnOnlyError, bool enableCaching, int inputValue, int expectedCount)
         {
             Validator<int> validator = new Validator<int>()
             {
-                ReturnOnlyErrors = true,
-                EnableCaching = false
+                ReturnOnlyErrors = returnOnlyError,
+                EnableCaching = enableCaching
             };
             validator.AddValidation(val1);
             validator.AddValidation(val2);
 
-            int actual = validator.Validate(3).Count();
-            int expected = 1;
+            int actual = validator.Validate(inputValue).Count();
 
-            Assert.Equal(expected: expected, actual: actual);
-        }
-
-        [Fact]
-        [Trait(name: "Issue", value: "1")]
-        public void ReturnOnlyError_true_Erwarte_1_Eintrag_von_2_Validierungen_EnableCaching_true()
-        {
-            Validator<int> validator = new Validator<int>()
-            {
-                ReturnOnlyErrors = true,
-                EnableCaching = true
-            };
-            validator.AddValidation(val1);
-            validator.AddValidation(val2);
-
-            int actual = validator.Validate(3).Count();
-            int expected = 1;
-
-            Assert.Equal(expected: expected, actual: actual);
-        }
-
-        [Fact]
-        [Trait(name: "Issue", value: "1")]
-        public void ReturnOnlyError_false_Erwarte_e_Eintraege_von_2_Validierungen_EnableCaching_false()
-        {
-            Validator<int> validator = new Validator<int>()
-            {
-                ReturnOnlyErrors = false,
-                EnableCaching = false
-            };
-            validator.AddValidation(val1);
-            validator.AddValidation(val2);
-
-            int actual = validator.Validate(3).Count();
-            int expected = 2;
-
-            Assert.Equal(expected: expected, actual: actual);
-        }
-
-        [Fact]
-        [Trait(name: "Issue", value: "1")]
-        public void ReturnOnlyError_false_Erwarte_2_Eintraege_von_2_Validierungen_EnableCaching_true()
-        {
-            Validator<int> validator = new Validator<int>()
-            {
-                ReturnOnlyErrors = false,
-                EnableCaching = true
-            };
-            validator.AddValidation(val1);
-            validator.AddValidation(val2);
-
-            int actual = validator.Validate(3).Count();
-            int expected = 2;
-
-            Assert.Equal(expected: expected, actual: actual);
+            Assert.Equal(expected: expectedCount, actual: actual);
         }
     }
 }
