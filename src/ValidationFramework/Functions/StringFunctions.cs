@@ -32,13 +32,13 @@ namespace ValidationFramework.Functions
         }
 
         /// <summary>
-        /// 
+        /// Checkts whether the string is empty
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">The input value</param>
+        /// <returns>Returns true if the input value is empty</returns>
         public static bool IsEmpty(this string value)
         {
-            throw new NotImplementedException();
+            return value == string.Empty;
         }
     }
 }
