@@ -19,7 +19,7 @@ namespace ValidationFramework.Tests
                 originalValue: (i) => i,
                 validationFunction: (i) => i < 5);
 
-        [Theory]
+        [Theory(DisplayName = "Test_ReturnOnlyErrors_2_Validierungen")]
         [Trait(name: "Issue", value: "2")]
         [InlineData(true, false, 3, 1)]
         [InlineData(true, true, 3, 1)]

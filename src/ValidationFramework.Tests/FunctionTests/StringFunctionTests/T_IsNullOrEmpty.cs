@@ -8,7 +8,7 @@ namespace ValidationFramework.Tests.FunctionTests.StringFunctionTests
 {
     public class T_IsNullOrEmpty
     {
-        [Theory]
+        [Theory(DisplayName = "TestIsNullOrEmpty")]
         [InlineData(null, true)]
         [InlineData("", true)]
         [InlineData("a", false)]
