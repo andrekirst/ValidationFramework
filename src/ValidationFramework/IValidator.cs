@@ -81,5 +81,10 @@ namespace ValidationFramework
         /// <param name="nameFilter">A filter that does filter the validations by the <see cref="Validation{T}.Name"/> of the validation</param>
         /// <returns>A list of <see cref="ValidationResponse"/></returns>
         IEnumerable<ValidationResponse> Validate(T value, string nameFilter = null);
+
+        /// <summary>
+        /// If set to true, the validation method returns only errors. Else errors and successful items.
+        /// </summary>
+        bool ReturnOnlyErrors { get; set; }
     }
 }
