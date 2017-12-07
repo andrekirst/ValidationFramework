@@ -13,5 +13,10 @@ namespace ValidationFramework.Functions
                 input: value,
                 pattern: pattern);
         }
+
+        public static bool IsNullOrEmpty(this string value)
+        {
+            return string.IsNullOrEmpty(value: value);
+        }
     }
 }
