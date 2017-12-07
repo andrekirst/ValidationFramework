@@ -7,6 +7,13 @@ namespace ValidationFramework.Functions
 {
     public static class StringFunctions
     {
+        /// <summary>
+        /// Matches a regular expression
+        /// </summary>
+        /// <param name="value">The value to validate</param>
+        /// <param name="pattern">The regular expression pattern</param>
+        /// <exception cref="ArgumentNullException">Throws <see cref="ArgumentNullException"/> if the value or expression is null</exception>
+        /// <returns>Returns true, if the value is valid. Else false</returns>
         public static bool MatchesRegexp(this string value, string pattern)
         {
             return Regex.IsMatch(
@@ -14,9 +21,24 @@ namespace ValidationFramework.Functions
                 pattern: pattern);
         }
 
+        /// <summary>
+        /// Checks whether the string is null or empty
+        /// </summary>
+        /// <param name="value">The input value</param>
+        /// <returns>Returns true if the input value is null or empty</returns>
         public static bool IsNullOrEmpty(this string value)
         {
             return string.IsNullOrEmpty(value: value);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsEmpty(this string value)
+        {
+            throw new NotImplementedException();
         }
     }
 }
