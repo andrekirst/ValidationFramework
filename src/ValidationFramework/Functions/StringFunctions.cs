@@ -40,5 +40,15 @@ namespace ValidationFramework.Functions
         {
             return value == string.Empty;
         }
+
+        public static bool IsEMail(this string input)
+        {
+            if (input == null)
+            {
+                return false;
+            }
+
+            return input.MatchesRegexp(pattern: @"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+        }
     }
 }
