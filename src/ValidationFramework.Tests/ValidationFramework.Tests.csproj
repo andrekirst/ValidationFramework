@@ -17,4 +17,8 @@
     <ProjectReference Include="..\ValidationFramework\ValidationFramework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FunctionTests\DateFunctionTests\" />
+  </ItemGroup>
+
 </Project>
