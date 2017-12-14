@@ -102,5 +102,63 @@ namespace ValidationFramework.Tests
 
             Assert.Equal(expected: 2, actual: validator.Validations.Count);
         }
+
+        [Fact(DisplayName = "TestIsAllValid_2_Error_Expect_False")]
+        [Trait(name: "Issue", value: "10")]
+        [Trait(name: "Function", value: "IsAllValid")]
+        public void TestIsAllValid_2_Error_Expect_False()
+        {
+            List<AbstractValidation<int>> list = new List<AbstractValidation<int>>();
+            list.Add(new Validation<int>(
+                    messageOnError: "ERR",
+                    messageOnSuccess: "SUC",
+                    name: "MOD",
+                    originalValue: (i) => i,
+                    validationFunction: (i) => i < 3));
+
+            list.Add(new Validation<int>(
+                    messageOnError: "ERR",
+                    messageOnSuccess: "SUC",
+                    name: "MOD2",
+                    originalValue: (i) => i,
+                    validationFunction: (i) => i < 4));
+
+            Validator<int> validator = new Validator<int>()
+                .Add(validations: list);
+
+            bool actual = validator.Validate(value: 5).IsAllValid();
+            bool expected = false;
+
+            Assert.Equal(expected: expected, actual: actual);
+        }
+
+        [Fact(DisplayName = "TestIsAllValid_0_Error_Expect_True")]
+        [Trait(name: "Issue", value: "10")]
+        [Trait(name: "Function", value: "IsAllValid")]
+        public void TestIsAllValid_0_Error_Expect_True()
+        {
+            List<AbstractValidation<int>> list = new List<AbstractValidation<int>>();
+            list.Add(new Validation<int>(
+                    messageOnError: "ERR",
+                    messageOnSuccess: "SUC",
+                    name: "MOD",
+                    originalValue: (i) => i,
+                    validationFunction: (i) => i < 3));
+
+            list.Add(new Validation<int>(
+                    messageOnError: "ERR",
+                    messageOnSuccess: "SUC",
+                    name: "MOD2",
+                    originalValue: (i) => i,
+                    validationFunction: (i) => i < 4));
+
+            Validator<int> validator = new Validator<int>()
+                .Add(validations: list);
+
+            bool actual = validator.Validate(value: 2).IsAllValid();
+            bool expected = true;
+
+            Assert.Equal(expected: expected, actual: actual);
+        }
     }
 }

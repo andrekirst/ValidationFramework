@@ -1,0 +1,33 @@
+# Erweiterte Dokumentation: https://www.appveyor.com/docs/appveyor-yml/
+
+# Version festlegen
+version: 1.0.{build}
+
+clone_folder: c:\projects\validationframework
+
+skip_branch_with_pr: false
+
+# VM-Template für Visual Studio 2017
+image: Visual Studio 2017
+
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
+platform: Any CPU
+configuration: Release
+
+matrix:
+  fast_finish: true
+
+before_build:
+  - dotnet restore c:\projects\validationframework\src\ValidationFramework.sln
+
+build_script:
+  - dotnet build c:\projects\validationframework\src\ValidationFramework.sln -c Release
+
+test_script:
+  - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release
