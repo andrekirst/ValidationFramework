@@ -1,4 +1,6 @@
-# Welcome
+# ValidationFramework
+
+The Validation Frameowrk is a framework to validate a single or bulk input.
 
 ## Examples
 
