@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace ValidationFramework
 {
@@ -76,6 +77,16 @@ namespace ValidationFramework
             validator.AddValidation(validations: validations);
 
             return validator;
+        }
+
+        /// <summary>
+        /// Returns true if all validations are successful
+        /// </summary>
+        /// <param name="validationResponse">The list of the response of the validations</param>
+        /// <returns>True if all responses are successful</returns>
+        public static bool IsAllValid(this IEnumerable<ValidationResponse> validationResponse)
+        {
+            return validationResponse.All(predicate: (val) => val.Type == ValidationResponseType.Success);
         }
     }
 }
