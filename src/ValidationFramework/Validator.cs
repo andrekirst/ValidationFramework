@@ -8,6 +8,9 @@ namespace ValidationFramework
     {
         private List<AbstractValidation<T>> _validations = new List<AbstractValidation<T>>();
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Validator()
         {
         }
@@ -24,10 +27,13 @@ namespace ValidationFramework
         /// <inheritdoc />
         public bool EnableCaching { get; set; } = true;
 
-        protected Dictionary<string, bool> Cache { get; set; } = new Dictionary<string, bool>();
-
         /// <inheritdoc />
         public bool ReturnOnlyErrors { get; set; } = false;
+
+        /// <summary>
+        /// The internal cache
+        /// </summary>
+        protected Dictionary<string, bool> Cache { get; set; } = new Dictionary<string, bool>();
 
         /// <inheritdoc />
         public IEnumerable<ValidationResponse> Validate(T value)
