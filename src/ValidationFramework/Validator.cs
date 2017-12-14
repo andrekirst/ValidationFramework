@@ -6,7 +6,7 @@ namespace ValidationFramework
 {
     public class Validator<T> : IValidator<T>
     {
-        private List<AbstractValidation<T>> _validations = new List<AbstractValidation<T>>();
+        private readonly List<AbstractValidation<T>> _validations = new List<AbstractValidation<T>>();
 
         /// <summary>
         /// Default constructor
@@ -38,13 +38,13 @@ namespace ValidationFramework
         /// <inheritdoc />
         public IEnumerable<ValidationResponse> Validate(T value)
         {
-            return Validate(
+            return ValidateWithFilter(
                 value: value,
                 wherePredicate: null);
         }
 
         /// <inheritdoc />
-        public IEnumerable<ValidationResponse> Validate(T value, string nameFilter = null)
+        public IEnumerable<ValidationResponse> ValidateWithNameFilter(T value, string nameFilter = null)
         {
             Func<AbstractValidation<T>, bool> wherePredicate = null;
 
@@ -53,7 +53,7 @@ namespace ValidationFramework
                 wherePredicate = (i) => i.Name == nameFilter;
             }
 
-            return Validate(
+            return ValidateWithFilter(
                 value: value,
                 wherePredicate: wherePredicate);
         }
@@ -70,12 +70,10 @@ namespace ValidationFramework
                     yield return response;
                 }
             }
-
-            yield break;
         }
 
         /// <inheritdoc />
-        public IEnumerable<ValidationResponse> Validate(T value, Func<AbstractValidation<T>, bool> wherePredicate = null)
+        public IEnumerable<ValidationResponse> ValidateWithFilter(T value, Func<AbstractValidation<T>, bool> wherePredicate = null)
         {
             wherePredicate = wherePredicate ?? new Func<AbstractValidation<T>, bool>((i) => true);
 
@@ -195,8 +193,6 @@ namespace ValidationFramework
                     }
                 }
             }
-
-            yield break;
         }
 
         /// <inheritdoc />
@@ -205,26 +201,6 @@ namespace ValidationFramework
             if (!Validations.Any(a => a.Name == validation.Name))
             {
                 _validations.Add(item: validation);
-            }
-            else
-            {
-                UpdateValidation(validation: validation);
-            }
-        }
-
-        /// <inheritdoc />
-        public void UpdateValidation(AbstractValidation<T> validation)
-        {
-            if (Validations.Any(predicate: v => v.Name == validation.Name))
-            {
-                AbstractValidation<T> foundValidation = _validations.First(predicate: f => f.Name == validation.Name);
-                foundValidation = validation;
-            }
-            else
-            {
-                throw new ArgumentException(
-                    message: $"Validation {validation.Name} not found",
-                    paramName: nameof(validation));
             }
         }
 

@@ -11,8 +11,8 @@ namespace ValidationFramework
         private readonly string _messageOnError;
         private readonly string _messageOnSuccess;
         private readonly string _name;
-        private Func<T, object> _originalValue;
-        private Func<T, bool> _validationFunction;
+        private readonly Func<T, object> _originalValue;
+        private readonly Func<T, bool> _validationFunction;
 
         public Validation(string messageOnError, string messageOnSuccess, string name, Func<T, object> originalValue, Func<T, bool> validationFunction)
         {
