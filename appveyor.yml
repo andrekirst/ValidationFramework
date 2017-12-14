@@ -32,9 +32,9 @@ before_build:
   - dotnet restore c:\projects\validationframework\src\ValidationFramework.sln
 
 build_script:
-  - ps: MSBuild.SonarQube.Runner.exe begin /k:"ValidationFramework" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=$($env:SONARQUBE_TOKEN)" /d:"sonar.exclusions=**/AssemblyInfo.cs" /d:"sonar.dotnet.visualstudio.testProjectPattern=*.Test" /d:sonar.cs.opencover.reportsPaths="./opencovertests.xml" /v:"$($env:sonarqubeprefix)$($env:appveyor_build_version)"
+  - ps: MSBuild.SonarQube.Runner.exe begin /k:"ValidationFramework" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=$($env:SONARQUBE_TOKEN)" /d:"sonar.exclusions=**/AssemblyInfo.cs" /d:"sonar.dotnet.visualstudio.testProjectPattern=*.Test" /v:"$($env:sonarqubeprefix)$($env:appveyor_build_version)"
   - dotnet build c:\projects\validationframework\src\ValidationFramework.sln -c Release
-  - ps: MSBuild.SonarQube.Runner.exe end /d:"sonar.login=$($env:SONARQUBE_TOKEN)"
+  - ps: MSBuild.SonarQube.Runner.exe end /d:"sonar.login=$($env:SONARQUBE_TOKEN)" -X
 
 test_script:
   - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release
