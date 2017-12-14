@@ -28,7 +28,7 @@ environment:
     secure: Z4637knUKkjAjauYzNAXyFQkph2OKVE9AqGNBkvjrN6CCbjruk1k9acqL1KPd4Kq
 
 before_build:
-  - choco install "msbuild-sonarqube-runner" -y --force
+  - choco install "msbuild-sonarqube-runner" -y
   - dotnet restore c:\projects\validationframework\src\ValidationFramework.sln
 
 build_script:
