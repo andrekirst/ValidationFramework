@@ -4,4 +4,4 @@ dotnet: 2.0.0
 script:
   - dotnet restore ./src/ValidationFramework.sln
   - dotnet build ./src/ValidationFramework.sln -c Release
-  - dotnet test ./src/ValidationFramework.Tests/ValidationFramework.Tests.csproj -c Release
+  - dotnet test ./src/ValidationFramework.Tests/ValidationFramework.Tests.csproj -c Release -t
