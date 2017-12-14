@@ -30,4 +30,4 @@ build_script:
   - dotnet build c:\projects\validationframework\src\ValidationFramework.sln -c Release
 
 test_script:
-  - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release -t
+  - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release
