@@ -23,7 +23,7 @@ namespace ValidationFramework.Examples.Example2
             int valuetoCheck = 2;
 
             Console.WriteLine("Validate the value");
-            var responses = validator.Validate(value: valuetoCheck);
+            var responses = validator.ValidateSingleValue(value: valuetoCheck);
 
             foreach (var response in responses)
             {

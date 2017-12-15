@@ -39,7 +39,7 @@ namespace ValidationFramework.Tests
             validator.AddValidation(val1);
             validator.AddValidation(val2);
 
-            int actual = validator.Validate(inputValue).Count();
+            int actual = validator.ValidateSingleValue(inputValue).Count();
 
             Assert.Equal(expected: expectedCount, actual: actual);
         }

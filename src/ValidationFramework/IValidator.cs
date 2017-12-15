@@ -51,14 +51,14 @@ namespace ValidationFramework
         /// </summary>
         /// <param name="values">The values to validate</param>
         /// <returns>A list of <see cref="ValidationResponse"/></returns>
-        IEnumerable<ValidationResponse> Validate(IEnumerable<T> values);
+        IEnumerable<ValidationResponse> ValidateList(IEnumerable<T> values);
 
         /// <summary>
         /// Validates the validations and returns a list of <see cref="ValidationResponse"/>
         /// </summary>
         /// <param name="value">The value to validate</param>
         /// <returns>A list of <see cref="ValidationResponse"/></returns>
-        IEnumerable<ValidationResponse> Validate(T value);
+        IEnumerable<ValidationResponse> ValidateSingleValue(T value);
 
         /// <summary>
         /// Validates the validations and returns a list of <see cref="ValidationResponse"/>

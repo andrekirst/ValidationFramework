@@ -126,7 +126,7 @@ namespace ValidationFramework.Tests
             Validator<int> validator = new Validator<int>()
                 .Add(validations: list);
 
-            bool actual = validator.Validate(value: 5).IsAllValid();
+            bool actual = validator.ValidateSingleValue(value: 5).IsAllValid();
             bool expected = false;
 
             Assert.Equal(expected: expected, actual: actual);
@@ -155,7 +155,7 @@ namespace ValidationFramework.Tests
             Validator<int> validator = new Validator<int>()
                 .Add(validations: list);
 
-            bool actual = validator.Validate(value: 2).IsAllValid();
+            bool actual = validator.ValidateSingleValue(value: 2).IsAllValid();
             bool expected = true;
 
             Assert.Equal(expected: expected, actual: actual);
