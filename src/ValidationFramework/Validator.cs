@@ -145,14 +145,14 @@ namespace ValidationFramework
                     {
                         bool valid = Cache[key: cacheKey];
 
+                        OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
+                                                cacheKey: cacheKey,
+                                                originalValue: originalValue,
+                                                valid: valid,
+                                                validation: validation));
+
                         if (!valid && ReturnOnlyErrors)
                         {
-                            OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
-                                                    cacheKey: cacheKey,
-                                                    originalValue: originalValue,
-                                                    valid: valid,
-                                                    validation: validation));
-
                             yield return CreateValidationResponse(
                                 valid: valid,
                                 validation: validation,
@@ -160,11 +160,6 @@ namespace ValidationFramework
                         }
                         else if (!ReturnOnlyErrors)
                         {
-                            OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
-                                                    cacheKey: cacheKey,
-                                                    originalValue: originalValue,
-                                                    valid: valid,
-                                                    validation: validation));
 
                             yield return CreateValidationResponse(
                                 valid: valid,
@@ -177,14 +172,14 @@ namespace ValidationFramework
                         bool valid = validation.IsValid(value: value);
                         Cache.Add(key: cacheKey, value: valid);
 
+                        OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
+                                                cacheKey: cacheKey,
+                                                originalValue: originalValue,
+                                                valid: valid,
+                                                validation: validation));
+
                         if (!valid && ReturnOnlyErrors)
                         {
-                            OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
-                                                    cacheKey: cacheKey,
-                                                    originalValue: originalValue,
-                                                    valid: valid,
-                                                    validation: validation));
-
                             yield return CreateValidationResponse(
                                 valid: valid,
                                 validation: validation,
@@ -192,12 +187,6 @@ namespace ValidationFramework
                         }
                         else if (!ReturnOnlyErrors)
                         {
-                            OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
-                                                    cacheKey: cacheKey,
-                                                    originalValue: originalValue,
-                                                    valid: valid,
-                                                    validation: validation));
-
                             yield return CreateValidationResponse(
                                 valid: valid,
                                 validation: validation,
