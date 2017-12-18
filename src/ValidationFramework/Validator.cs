@@ -120,14 +120,7 @@ namespace ValidationFramework
                 {
                     bool valid = validation.IsValid(value: value);
 
-                    if (!valid && ReturnOnlyErrors)
-                    {
-                        yield return CreateValidationResponse(
-                                            valid: valid,
-                                            validation: validation,
-                                            value: value);
-                    }
-                    else if (!ReturnOnlyErrors)
+                    if ((!valid && ReturnOnlyErrors) || !ReturnOnlyErrors)
                     {
                         yield return CreateValidationResponse(
                                             valid: valid,
@@ -151,16 +144,8 @@ namespace ValidationFramework
                                                 valid: valid,
                                                 validation: validation));
 
-                        if (!valid && ReturnOnlyErrors)
+                        if ((!valid && ReturnOnlyErrors) || !ReturnOnlyErrors)
                         {
-                            yield return CreateValidationResponse(
-                                valid: valid,
-                                validation: validation,
-                                value: value);
-                        }
-                        else if (!ReturnOnlyErrors)
-                        {
-
                             yield return CreateValidationResponse(
                                 valid: valid,
                                 validation: validation,
@@ -178,14 +163,7 @@ namespace ValidationFramework
                                                 valid: valid,
                                                 validation: validation));
 
-                        if (!valid && ReturnOnlyErrors)
-                        {
-                            yield return CreateValidationResponse(
-                                valid: valid,
-                                validation: validation,
-                                value: value);
-                        }
-                        else if (!ReturnOnlyErrors)
+                        if ((!valid && ReturnOnlyErrors) || !ReturnOnlyErrors)
                         {
                             yield return CreateValidationResponse(
                                 valid: valid,
