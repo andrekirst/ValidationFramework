@@ -44,7 +44,9 @@ namespace ValidationFramework
         }
 
         /// <inheritdoc />
-        public IEnumerable<ValidationResponse> ValidateWithNameFilter(T value, string nameFilter = null)
+        public IEnumerable<ValidationResponse> ValidateWithNameFilter(
+            T value,
+            string nameFilter = null)
         {
             Func<AbstractValidation<T>, bool> wherePredicate = null;
 
@@ -73,7 +75,9 @@ namespace ValidationFramework
         }
 
         /// <inheritdoc />
-        public IEnumerable<ValidationResponse> ValidateWithFilter(T value, Func<AbstractValidation<T>, bool> wherePredicate = null)
+        public IEnumerable<ValidationResponse> ValidateWithFilter(
+            T value,
+            Func<AbstractValidation<T>, bool> wherePredicate = null)
         {
             wherePredicate = wherePredicate ?? new Func<AbstractValidation<T>, bool>((i) => true);
 
@@ -87,20 +91,15 @@ namespace ValidationFramework
             }
         }
 
-        private IEnumerable<ValidationResponse> ValidateWithCachingDisabled(T value, Func<AbstractValidation<T>, bool> wherePredicate)
+        private IEnumerable<ValidationResponse> ValidateWithCachingDisabled(
+            T value,
+            Func<AbstractValidation<T>, bool> wherePredicate)
         {
             foreach (AbstractValidation<T> validation in Validations.Where(predicate: wherePredicate))
             {
                 bool valid = validation.IsValid(value: value);
 
-                if (!valid && ReturnOnlyErrors)
-                {
-                    yield return CreateValidationResponse(
-                        valid: valid,
-                        validation: validation,
-                        value: value);
-                }
-                else if (!ReturnOnlyErrors)
+                if ((!valid && ReturnOnlyErrors) || !ReturnOnlyErrors)
                 {
                     yield return CreateValidationResponse(
                         valid: valid,
@@ -110,13 +109,14 @@ namespace ValidationFramework
             }
         }
 
-        private IEnumerable<ValidationResponse> ValidateWithCachingEnabled(T value, Func<AbstractValidation<T>, bool> wherePredicate)
+        private IEnumerable<ValidationResponse> ValidateWithCachingEnabled(
+            T value,
+            Func<AbstractValidation<T>, bool> wherePredicate)
         {
-            Func<bool, bool, bool> doYieldReturn = (valid, returonOnlyErrors) =>
+            bool doYieldReturn(bool valid, bool returnOnlyErrors)
             {
-                return (!valid && returonOnlyErrors) || !returonOnlyErrors;
-            };
-
+                return (!valid && returnOnlyErrors) || !returnOnlyErrors;
+            }
 
             foreach (AbstractValidation<T> validation in Validations.Where(predicate: wherePredicate))
             {
@@ -126,7 +126,7 @@ namespace ValidationFramework
                 {
                     bool valid = validation.IsValid(value: value);
 
-                    if (doYieldReturn(valid, ReturnOnlyErrors))
+                    if (doYieldReturn(valid: valid, returnOnlyErrors: ReturnOnlyErrors))
                     {
                         yield return CreateValidationResponse(
                                             valid: valid,
@@ -150,7 +150,7 @@ namespace ValidationFramework
                                                 valid: valid,
                                                 validation: validation));
 
-                        if (doYieldReturn(valid, ReturnOnlyErrors))
+                        if (doYieldReturn(valid: valid, returnOnlyErrors: ReturnOnlyErrors))
                         {
                             yield return CreateValidationResponse(
                                 valid: valid,
@@ -169,7 +169,7 @@ namespace ValidationFramework
                                                 valid: valid,
                                                 validation: validation));
 
-                        if (doYieldReturn(valid, ReturnOnlyErrors))
+                        if (doYieldReturn(valid: valid, returnOnlyErrors: ReturnOnlyErrors))
                         {
                             yield return CreateValidationResponse(
                                 valid: valid,
@@ -227,7 +227,10 @@ namespace ValidationFramework
                     validation: eventArgs.Validation));
         }
 
-        private ValidationResponse CreateValidationResponse(bool valid, AbstractValidation<T> validation, T value)
+        private ValidationResponse CreateValidationResponse(
+            bool valid,
+            AbstractValidation<T> validation,
+            T value)
         {
             return new ValidationResponse(
                 type: valid ? ValidationResponseType.Success : ValidationResponseType.Error,

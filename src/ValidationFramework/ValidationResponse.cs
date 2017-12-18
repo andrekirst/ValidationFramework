@@ -12,7 +12,11 @@
         /// <param name="name">The name of the validation</param>
         /// <param name="originalValue">The original value that was validated</param>
         /// <param name="type">The response type</param>
-        public ValidationResponse(string message, string name, object originalValue, ValidationResponseType type)
+        public ValidationResponse(
+            string message,
+            string name,
+            object originalValue,
+            ValidationResponseType type)
         {
             Message = message;
             Name = name;

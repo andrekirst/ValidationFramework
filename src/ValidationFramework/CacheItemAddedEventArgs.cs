@@ -15,7 +15,11 @@ namespace ValidationFramework
         /// <param name="originalValue">The original value</param>
         /// <param name="valid">The result</param>
         /// <param name="validation">The validation</param>
-        public CacheItemAddedEventArgs(string cacheKey, object originalValue, bool valid, AbstractValidation<T> validation)
+        public CacheItemAddedEventArgs(
+            string cacheKey,
+            object originalValue,
+            bool valid,
+            AbstractValidation<T> validation)
         {
             CacheKey = cacheKey;
             OriginalValue = originalValue;

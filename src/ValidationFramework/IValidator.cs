@@ -66,7 +66,9 @@ namespace ValidationFramework
         /// <param name="value">The value to validate</param>
         /// <param name="wherePredicate">A filterpredicate</param>
         /// <returns>A list of <see cref="ValidationResponse"/></returns>
-        IEnumerable<ValidationResponse> ValidateWithFilter(T value, Func<AbstractValidation<T>, bool> wherePredicate = null);
+        IEnumerable<ValidationResponse> ValidateWithFilter(
+            T value, Func<AbstractValidation<T>,
+                bool> wherePredicate = null);
 
         /// <summary>
         /// Validates the validations and returns a list of <see cref="ValidationResponse"/>
@@ -74,7 +76,9 @@ namespace ValidationFramework
         /// <param name="value">The value to validate</param>
         /// <param name="nameFilter">A filter that does filter the validations by the <see cref="Validation{T}.Name"/> of the validation</param>
         /// <returns>A list of <see cref="ValidationResponse"/></returns>
-        IEnumerable<ValidationResponse> ValidateWithNameFilter(T value, string nameFilter = null);
+        IEnumerable<ValidationResponse> ValidateWithNameFilter(
+            T value,
+            string nameFilter = null);
 
         /// <summary>
         /// If set to true, the validation method returns only errors. Else errors and successful items.

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
 namespace ValidationFramework
@@ -94,7 +93,9 @@ namespace ValidationFramework
         /// <param name="validation">The validation to add</param>
         /// <returns>Returns the Instance of <see cref="Validator{T}"/></returns>
         /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="Validator{T}"/> is null</exception>
-        public static Validator<T> Add<T>(this Validator<T> validator, AbstractValidation<T> validation)
+        public static Validator<T> Add<T>(
+            this Validator<T> validator,
+            AbstractValidation<T> validation)
         {
             if (validator == null)
             {
@@ -114,7 +115,9 @@ namespace ValidationFramework
         /// <param name="validations">The validations to add</param>
         /// <returns>Returns the Instance of <see cref="Validator{T}"/></returns>
         /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="Validator{T}"/> is null</exception>
-        public static Validator<T> Add<T>(this Validator<T> validator, IEnumerable<AbstractValidation<T>> validations)
+        public static Validator<T> Add<T>(
+            this Validator<T> validator,
+            IEnumerable<AbstractValidation<T>> validations)
         {
             if (validator == null)
             {
@@ -133,7 +136,7 @@ namespace ValidationFramework
         /// <returns>True if all responses are successful</returns>
         public static bool IsAllValid(this IEnumerable<ValidationResponse> validationResponse)
         {
-            return validationResponse.All(predicate: (val) => val.Type == ValidationResponseType.Success);
+            return validationResponse.All(predicate: (val) => val.Type != ValidationResponseType.Error);
         }
     }
 }
