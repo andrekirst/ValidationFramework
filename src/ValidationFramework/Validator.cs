@@ -112,6 +112,12 @@ namespace ValidationFramework
 
         private IEnumerable<ValidationResponse> ValidateWithCachingEnabled(T value, Func<AbstractValidation<T>, bool> wherePredicate)
         {
+            Func<bool, bool, bool> doYieldReturn = (valid, returonOnlyErrors) =>
+            {
+                return (!valid && returonOnlyErrors) || !returonOnlyErrors;
+            };
+
+
             foreach (AbstractValidation<T> validation in Validations.Where(predicate: wherePredicate))
             {
                 object originalValue = validation.OriginalValue(arg: value);
@@ -120,7 +126,7 @@ namespace ValidationFramework
                 {
                     bool valid = validation.IsValid(value: value);
 
-                    if ((!valid && ReturnOnlyErrors) || !ReturnOnlyErrors)
+                    if (doYieldReturn(valid, ReturnOnlyErrors))
                     {
                         yield return CreateValidationResponse(
                                             valid: valid,
@@ -144,7 +150,7 @@ namespace ValidationFramework
                                                 valid: valid,
                                                 validation: validation));
 
-                        if ((!valid && ReturnOnlyErrors) || !ReturnOnlyErrors)
+                        if (doYieldReturn(valid, ReturnOnlyErrors))
                         {
                             yield return CreateValidationResponse(
                                 valid: valid,
@@ -163,7 +169,7 @@ namespace ValidationFramework
                                                 valid: valid,
                                                 validation: validation));
 
-                        if ((!valid && ReturnOnlyErrors) || !ReturnOnlyErrors)
+                        if (doYieldReturn(valid, ReturnOnlyErrors))
                         {
                             yield return CreateValidationResponse(
                                 valid: valid,
