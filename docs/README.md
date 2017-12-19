@@ -1,6 +1,6 @@
 # ValidationFramework
 
-The Validation Frameowrk is a framework to validate a single or bulk input.
+The Validation Framework is a framework to validate a single or bulk input.
 
 ## Sonarqube-Status
 
