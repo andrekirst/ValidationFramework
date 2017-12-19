@@ -2,6 +2,10 @@
 
 The Validation Frameowrk is a framework to validate a single or bulk input.
 
+## Sonarqube-Status
+
+[![Quality Gate](https://sonarcloud.io/api/badges/gate?key=andrekirst:ValidationFramework)](https://sonarcloud.io/dashboard/index/andrekirst:ValidationFramework) [![Lines](https://sonarcloud.io/api/badges/measure?key=andrekirst:ValidationFramework&metric=lines)](https://sonarcloud.io/dashboard/index/andrekirst:ValidationFramework) [![code smells](https://sonarcloud.io/api/badges/measure?key=andrekirst:ValidationFramework&metric=code_smells)](https://sonarcloud.io/dashboard/index/andrekirst:ValidationFramework) [![bugs](https://sonarcloud.io/api/badges/measure?key=andrekirst:ValidationFramework&metric=bugs)](https://sonarcloud.io/dashboard/index/andrekirst:ValidationFramework) [![vulnerabilities](https://sonarcloud.io/api/badges/measure?key=andrekirst:ValidationFramework&metric=vulnerabilities)](https://sonarcloud.io/dashboard/index/andrekirst:ValidationFramework) [![sqale_debt_ratio](https://sonarcloud.io/api/badges/measure?key=andrekirst:ValidationFramework&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard/index/andrekirst:ValidationFramework) [![reliability rating](https://sonarcloud.io/api/badges/measure?key=andrekirst:ValidationFramework&metric=reliability_rating)](https://sonarcloud.io/dashboard/index/andrekirst:ValidationFramework) [![security rating](https://sonarcloud.io/api/badges/measure?key=andrekirst:ValidationFramework&metric=security_rating)](https://sonarcloud.io/dashboard/index/andrekirst:ValidationFramework) [![coverage](https://sonarcloud.io/api/badges/measure?key=andrekirst:ValidationFramework&metric=coverage)](https://sonarcloud.io/dashboard/index/andrekirst:ValidationFramework)
+
 ## Examples
 
 ### Example 1 - Validator with simple inline validation with fluent
