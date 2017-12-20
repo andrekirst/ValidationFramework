@@ -6,7 +6,7 @@ namespace ValidationFramework
 {
     public class Validator<T> : IValidator<T>
     {
-        private List<AbstractValidation<T>> _validations = new List<AbstractValidation<T>>();
+        private readonly List<AbstractValidation<T>> _validations = new List<AbstractValidation<T>>();
 
         /// <summary>
         /// Default constructor
@@ -36,15 +36,17 @@ namespace ValidationFramework
         protected Dictionary<string, bool> Cache { get; set; } = new Dictionary<string, bool>();
 
         /// <inheritdoc />
-        public IEnumerable<ValidationResponse> Validate(T value)
+        public IEnumerable<ValidationResponse> ValidateSingleValue(T value)
         {
-            return Validate(
+            return ValidateWithFilter(
                 value: value,
                 wherePredicate: null);
         }
 
         /// <inheritdoc />
-        public IEnumerable<ValidationResponse> Validate(T value, string nameFilter = null)
+        public IEnumerable<ValidationResponse> ValidateWithNameFilter(
+            T value,
+            string nameFilter = null)
         {
             Func<AbstractValidation<T>, bool> wherePredicate = null;
 
@@ -53,150 +55,130 @@ namespace ValidationFramework
                 wherePredicate = (i) => i.Name == nameFilter;
             }
 
-            return Validate(
+            return ValidateWithFilter(
                 value: value,
                 wherePredicate: wherePredicate);
         }
 
         /// <inheritdoc />
-        public IEnumerable<ValidationResponse> Validate(IEnumerable<T> values)
+        public IEnumerable<ValidationResponse> ValidateList(IEnumerable<T> values)
         {
             foreach (T value in values)
             {
-                IEnumerable<ValidationResponse> responses = Validate(value: value);
+                IEnumerable<ValidationResponse> responses = ValidateSingleValue(value: value);
 
                 foreach (ValidationResponse response in responses)
                 {
                     yield return response;
                 }
             }
-
-            yield break;
         }
 
         /// <inheritdoc />
-        public IEnumerable<ValidationResponse> Validate(T value, Func<AbstractValidation<T>, bool> wherePredicate = null)
+        public IEnumerable<ValidationResponse> ValidateWithFilter(
+            T value,
+            Func<AbstractValidation<T>, bool> wherePredicate = null)
         {
             wherePredicate = wherePredicate ?? new Func<AbstractValidation<T>, bool>((i) => true);
 
+            if (EnableCaching)
+            {
+                return ValidateWithCachingEnabled(value: value, wherePredicate: wherePredicate);
+            }
+            else
+            {
+                return ValidateWithCachingDisabled(value: value, wherePredicate: wherePredicate);
+            }
+        }
+
+        private IEnumerable<ValidationResponse> ValidateWithCachingDisabled(
+            T value,
+            Func<AbstractValidation<T>, bool> wherePredicate)
+        {
             foreach (AbstractValidation<T> validation in Validations.Where(predicate: wherePredicate))
             {
-                if (!EnableCaching || validation.OriginalValue == null)
+                bool valid = validation.IsValid(value: value);
+
+                if ((!valid && ReturnOnlyErrors) || !ReturnOnlyErrors)
+                {
+                    yield return CreateValidationResponse(
+                        valid: valid,
+                        validation: validation,
+                        value: value);
+                }
+            }
+        }
+
+        private IEnumerable<ValidationResponse> ValidateWithCachingEnabled(
+            T value,
+            Func<AbstractValidation<T>, bool> wherePredicate)
+        {
+            bool doYieldReturn(bool valid, bool returnOnlyErrors)
+            {
+                return (!valid && returnOnlyErrors) || !returnOnlyErrors;
+            }
+
+            foreach (AbstractValidation<T> validation in Validations.Where(predicate: wherePredicate))
+            {
+                object originalValue = validation.OriginalValue(arg: value);
+
+                if (originalValue == null)
                 {
                     bool valid = validation.IsValid(value: value);
 
-                    if (!valid && ReturnOnlyErrors)
+                    if (doYieldReturn(valid: valid, returnOnlyErrors: ReturnOnlyErrors))
                     {
                         yield return CreateValidationResponse(
-                            valid: valid,
-                            validation: validation,
-                            value: value);
-                    }
-                    else if (!ReturnOnlyErrors)
-                    {
-                        yield return CreateValidationResponse(
-                            valid: valid,
-                            validation: validation,
-                            value: value);
+                                            valid: valid,
+                                            validation: validation,
+                                            value: value);
                     }
                 }
                 else
                 {
-                    object originalValue = validation.OriginalValue(arg: value);
+                    int hashCode = originalValue.GetHashCode();
 
-                    if (originalValue == null)
+                    string cacheKey = $"[{validation.Name}][{hashCode}]";
+
+                    if (Cache.ContainsKey(key: cacheKey))
                     {
-                        bool valid = validation.IsValid(value: value);
+                        bool valid = Cache[key: cacheKey];
 
-                        if (!valid && ReturnOnlyErrors)
+                        OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
+                                                cacheKey: cacheKey,
+                                                originalValue: originalValue,
+                                                valid: valid,
+                                                validation: validation));
+
+                        if (doYieldReturn(valid: valid, returnOnlyErrors: ReturnOnlyErrors))
                         {
                             yield return CreateValidationResponse(
-                                                valid: valid,
-                                                validation: validation,
-                                                value: value);
-                        }
-                        else if (!ReturnOnlyErrors)
-                        {
-                            yield return CreateValidationResponse(
-                                                valid: valid,
-                                                validation: validation,
-                                                value: value);
+                                valid: valid,
+                                validation: validation,
+                                value: value);
                         }
                     }
                     else
                     {
-                        int hashCode = originalValue.GetHashCode();
+                        bool valid = validation.IsValid(value: value);
+                        Cache.Add(key: cacheKey, value: valid);
 
-                        string cacheKey = $"[{validation.Name}][{hashCode}]";
+                        OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
+                                                cacheKey: cacheKey,
+                                                originalValue: originalValue,
+                                                valid: valid,
+                                                validation: validation));
 
-                        if (Cache.ContainsKey(key: cacheKey))
+                        if (doYieldReturn(valid: valid, returnOnlyErrors: ReturnOnlyErrors))
                         {
-                            bool valid = Cache[key: cacheKey];
-
-                            if (!valid && ReturnOnlyErrors)
-                            {
-                                OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
-                                                        cacheKey: cacheKey,
-                                                        originalValue: originalValue,
-                                                        valid: valid,
-                                                        validation: validation));
-
-                                yield return CreateValidationResponse(
-                                    valid: valid,
-                                    validation: validation,
-                                    value: value);
-                            }
-                            else if (!ReturnOnlyErrors)
-                            {
-                                OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
-                                                        cacheKey: cacheKey,
-                                                        originalValue: originalValue,
-                                                        valid: valid,
-                                                        validation: validation));
-
-                                yield return CreateValidationResponse(
-                                    valid: valid,
-                                    validation: validation,
-                                    value: value);
-                            }
-                        }
-                        else
-                        {
-                            bool valid = validation.IsValid(value: value);
-                            Cache.Add(key: cacheKey, value: valid);
-
-                            if (!valid && ReturnOnlyErrors)
-                            {
-                                OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
-                                                        cacheKey: cacheKey,
-                                                        originalValue: originalValue,
-                                                        valid: valid,
-                                                        validation: validation));
-
-                                yield return CreateValidationResponse(
-                                    valid: valid,
-                                    validation: validation,
-                                    value: value);
-                            }
-                            else if (!ReturnOnlyErrors)
-                            {
-                                OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
-                                                        cacheKey: cacheKey,
-                                                        originalValue: originalValue,
-                                                        valid: valid,
-                                                        validation: validation));
-
-                                yield return CreateValidationResponse(
-                                    valid: valid,
-                                    validation: validation,
-                                    value: value);
-                            }
+                            yield return CreateValidationResponse(
+                                valid: valid,
+                                validation: validation,
+                                value: value);
                         }
                     }
                 }
             }
-
-            yield break;
         }
 
         /// <inheritdoc />
@@ -205,26 +187,6 @@ namespace ValidationFramework
             if (!Validations.Any(a => a.Name == validation.Name))
             {
                 _validations.Add(item: validation);
-            }
-            else
-            {
-                UpdateValidation(validation: validation);
-            }
-        }
-
-        /// <inheritdoc />
-        public void UpdateValidation(AbstractValidation<T> validation)
-        {
-            if (Validations.Any(predicate: v => v.Name == validation.Name))
-            {
-                AbstractValidation<T> foundValidation = _validations.First(predicate: f => f.Name == validation.Name);
-                foundValidation = validation;
-            }
-            else
-            {
-                throw new ArgumentException(
-                    message: $"Validation {validation.Name} not found",
-                    paramName: nameof(validation));
             }
         }
 
@@ -265,7 +227,10 @@ namespace ValidationFramework
                     validation: eventArgs.Validation));
         }
 
-        private ValidationResponse CreateValidationResponse(bool valid, AbstractValidation<T> validation, T value)
+        private ValidationResponse CreateValidationResponse(
+            bool valid,
+            AbstractValidation<T> validation,
+            T value)
         {
             return new ValidationResponse(
                 type: valid ? ValidationResponseType.Success : ValidationResponseType.Error,
