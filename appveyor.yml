@@ -43,7 +43,7 @@ build_script:
   - ps: >-
       $opencoverexe = (Resolve-Path "$env:USERPROFILE\.nuget\packages\openCover\*\tools\OpenCover.Console.exe").ToString();
 
-      & $opencoverexe -register:user -filter:"+[*]* -[*.Test*]*" -excludebyattribute:*ExcludeFromCodeCoverage* -target:xunit.console.exe "-targetargs:""c:\projects\validationframework\src\ValidationFramework\ValidationFramework.Tests\bin\$env:CONFIGURATION\netcoreapp2.0\ValidationFramework.Tests.dll""" -output:./opencovertests.xml
+      & $opencoverexe -register:user -filter:"+[*]* -[*.Test*]*" -excludebyattribute:*ExcludeFromCodeCoverage* -target:xunit.console.exe "-targetargs:""c:\projects\validationframework\src\ValidationFramework\ValidationFramework.Tests\bin\$PLATFORM\$env:CONFIGURATION\netcoreapp2.0\ValidationFramework.Tests.dll""" -output:./opencovertests.xml
   - ps: MSBuild.SonarQube.Runner.exe end /d:"sonar.login=$($env:SONARQUBE_TOKEN)"
 
 test_script:
