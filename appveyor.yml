@@ -40,7 +40,7 @@ before_build:
 build_script:
   - ps: MSBuild.SonarQube.Runner.exe begin /n:"ValidationFramework" /k:"andrekirst:ValidationFramework" /d:"sonar.organization=andrekirst-github" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:SONARQUBE_TOKEN)" /v:"$($env:appveyor_build_version)" /d:"sonar.dotnet.visualstudio.testProjectPattern=*.Test" /d:sonar.cs.opencover.reportsPaths="c:\projects\validationframework\opencovertests.xml" /d:sonar.cs.vstest.reportsPath="c:\projects\validationframework\opencovertests.trx"
   - dotnet build c:\projects\validationframework\src\ValidationFramework.sln -c Release
-  - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release--logger "trx;LogFileName=c:\projects\validationframework\opencovertests.trx"
+  - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release --logger "trx;LogFileName=c:\projects\validationframework\opencovertests.trx"
 #  - ps: >-
 #      $opencoverexe = (Resolve-Path "$env:USERPROFILE\.nuget\packages\openCover\*\tools\OpenCover.Console.exe").ToString();
 #      & $opencoverexe -register:user -filter:"+[*]* -[*.Test*]*" -excludebyattribute:*ExcludeFromCodeCoverage* -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test ""c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj"" --logger ""trx;LogFileName=c:\projects\validationframework\opencovertests.trx""" -oldStyle -output:"c:\projects\validationframework\opencovertests.xml"
