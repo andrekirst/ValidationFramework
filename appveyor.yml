@@ -22,12 +22,19 @@ environment:
 
 install:
   - choco install "msbuild-sonarqube-runner" -y
+  - choco install codecov -y --force
+
+before_build:
   - dotnet restore c:\projects\validationframework\src\ValidationFramework.sln
 
 build_script:
-  - ps: MSBuild.SonarQube.Runner.exe begin /n:"ValidationFramework" /k:"andrekirst:ValidationFramework" /d:"sonar.organization=andrekirst-github" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:SONARQUBE_TOKEN)" /v:"$($env:appveyor_build_version)"
+  - ps: MSBuild.SonarQube.Runner.exe begin /n:"ValidationFramework" /k:"andrekirst:ValidationFramework" /d:"sonar.organization=andrekirst-github" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:SONARQUBE_TOKEN)" /v:"$($env:appveyor_build_version)" /d:"sonar.dotnet.visualstudio.testProjectPattern=*.Test" /d:sonar.cs.opencover.reportsPaths="./opencovertests.xml"
   - dotnet build c:\projects\validationframework\src\ValidationFramework.sln -c Release
   - ps: MSBuild.SonarQube.Runner.exe end /d:"sonar.login=$($env:SONARQUBE_TOKEN)"
+  - ps: >-
+      $opencoverexe = (Resolve-Path "$env:APPVEYOR_BUILD_FOLDER\src\Fahrplanauskunft\packages\OpenCover.*\tools\OpenCover.Console.exe").ToString();
+
+      & $opencoverexe -register:user -filter:"+[*]* -[*.Test*]*" -excludebyattribute:*ExcludeFromCodeCoverage* -target:xunit.console.exe "-targetargs:""c:\projects\validationframework\src\ValidationFramework\ValidationFramework.Tests\bin\$env:CONFIGURATION\netcoreapp2.0\ValidationFramework.Tests.dll""" -output:./opencovertests.xml
 
 test_script:
   - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release

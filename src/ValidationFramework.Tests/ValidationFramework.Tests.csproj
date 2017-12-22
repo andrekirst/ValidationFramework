@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="FunctionTests\DateFunctionTests\" />
+    <Folder Include="ValidatorTests\ValidatorOneObjectTests\" />
   </ItemGroup>
 
 </Project>
