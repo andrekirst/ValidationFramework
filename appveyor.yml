@@ -42,10 +42,6 @@ build_script:
   - dotnet build c:\projects\validationframework\src\ValidationFramework.sln -c Release
   - ps: >-
       $opencoverexe = (Resolve-Path "$env:USERPROFILE\.nuget\packages\openCover\*\tools\OpenCover.Console.exe").ToString();
-      $testFilePath = Resolve-Path "C:\projects\validationframework\src\ValidationFramework.Tests\bin\$env:CONFIGURATION\netcoreapp2.0\ValidationFramework.Tests.dll";
-      $testFilePath;
-      Test-Path $testFilePath;
-      $testFilePath = "'$testFilePath'";
       & $opencoverexe -register:user -filter:"+[*]* -[*.Tests*]*" -excludebyattribute:*ExcludeFromCodeCoverage* -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test ""c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj"" --configuration $env:CONFIGURATION --no-build" -oldStyle -output:./opencovertests.xml
   - ps: MSBuild.SonarQube.Runner.exe end /d:"sonar.login=$($env:SONARQUBE_TOKEN)"
 
