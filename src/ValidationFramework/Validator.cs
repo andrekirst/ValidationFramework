@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ValidationFramework
 {
-    public class Validator<T> : IValidator<T>
+    public class Validator<T>
     {
         private readonly List<AbstractValidation<T>> _validations = new List<AbstractValidation<T>>();
 
