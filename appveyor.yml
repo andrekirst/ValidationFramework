@@ -38,11 +38,11 @@ before_build:
   - dotnet restore c:\projects\validationframework\src\ValidationFramework.sln
 
 build_script:
-  - ps: MSBuild.SonarQube.Runner.exe begin /n:"ValidationFramework" /k:"andrekirst:ValidationFramework" /d:"sonar.organization=andrekirst-github" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:SONARQUBE_TOKEN)" /v:"$($env:appveyor_build_version)" /d:"sonar.dotnet.visualstudio.testProjectPattern=*.Test" /d:sonar.cs.opencover.reportsPaths="c:\projects\validationframework\opencovertests.xml"
+  - ps: MSBuild.SonarQube.Runner.exe begin /n:"ValidationFramework" /k:"andrekirst:ValidationFramework" /d:"sonar.organization=andrekirst-github" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:SONARQUBE_TOKEN)" /v:"$($env:appveyor_build_version)" /d:"sonar.dotnet.visualstudio.testProjectPattern=*.Test" /d:sonar.cs.opencover.reportsPaths="c:\projects\validationframework\opencovertests.xml" /d:sonar.cs.vstest.reportsPath="c:\projects\validationframework\opencovertests.trx"
   - dotnet build c:\projects\validationframework\src\ValidationFramework.sln -c Release
   - ps: >-
       $opencoverexe = (Resolve-Path "$env:USERPROFILE\.nuget\packages\openCover\*\tools\OpenCover.Console.exe").ToString();
-      & $opencoverexe -register:user -filter:"+[*]*" -excludebyattribute:*ExcludeFromCodeCoverage* -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test ""c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj"" --logger ""trx;LogFileName=c:\projects\validationframework\opencovertests.xml""" -oldStyle -output:"c:\projects\validationframework\opencovertests.xml"
+      & $opencoverexe -register:user -filter:"+[*]*" -excludebyattribute:*ExcludeFromCodeCoverage* -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test ""c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj"" --logger ""trx;LogFileName=c:\projects\validationframework\opencovertests.trx""" -oldStyle -output:"c:\projects\validationframework\opencovertests.xml"
   - ps: MSBuild.SonarQube.Runner.exe end /d:"sonar.login=$($env:SONARQUBE_TOKEN)"
 
 test_script:
