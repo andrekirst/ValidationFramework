@@ -10,7 +10,7 @@ namespace ValidationFramework.Tests
         [Trait(name: "Function", value: "EnableCaching")]
         public void TestFluentDesignEnableCaching()
         {
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
                 .EnableCaching();
 
             bool expected = true;
@@ -24,7 +24,7 @@ namespace ValidationFramework.Tests
         [Trait(name: "Function", value: "DisableCaching")]
         public void TestFluentDesignDisableCaching()
         {
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
                 .DisableCaching();
 
             bool expected = false;
@@ -38,7 +38,7 @@ namespace ValidationFramework.Tests
         [Trait(name: "Function", value: "EnableReturnOnlyErrors")]
         public void TestFluentDesignEnableReturnOnlyErrors()
         {
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
                 .EnableReturnOnlyErrors();
 
             bool expected = true;
@@ -52,7 +52,7 @@ namespace ValidationFramework.Tests
         [Trait(name: "Function", value: "DisableReturnOnlyErrors")]
         public void TestFluentDesignDisableReturnOnlyErrors()
         {
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
                 .DisableReturnOnlyErrors();
 
             bool expected = false;
@@ -66,7 +66,7 @@ namespace ValidationFramework.Tests
         [Trait(name: "Function", value: "Add")]
         public void TestFluentDesignAdd()
         {
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
                 .Add(new Validation<int>(
                     messageOnError: "ERR",
                     messageOnSuccess: "SUC",
@@ -97,7 +97,7 @@ namespace ValidationFramework.Tests
                     originalValue: (i) => i,
                     validationFunction: (i) => i + 1 % 2 == 0));
 
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
                 .Add(validations: list);
 
             Assert.Equal(expected: 2, actual: validator.Validations.Count);
@@ -123,7 +123,7 @@ namespace ValidationFramework.Tests
                     originalValue: (i) => i,
                     validationFunction: (i) => i < 4));
 
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
                 .Add(validations: list);
 
             bool actual = validator.ValidateSingleValue(value: 5).IsAllValid();
@@ -152,7 +152,7 @@ namespace ValidationFramework.Tests
                     originalValue: (i) => i,
                     validationFunction: (i) => i < 4));
 
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
                 .Add(validations: list);
 
             bool actual = validator.ValidateSingleValue(value: 2).IsAllValid();

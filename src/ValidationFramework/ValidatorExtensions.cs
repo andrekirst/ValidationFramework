@@ -5,7 +5,7 @@ using System.Linq;
 namespace ValidationFramework
 {
     /// <summary>
-    /// Class with extension methods for <see cref="Validator{T}"/>
+    /// Class with extension methods for <see cref="SingleObjectValidator{T}"/>
     /// </summary>
     public static class ValidatorExtensions
     {
@@ -14,9 +14,9 @@ namespace ValidationFramework
         /// </summary>
         /// <typeparam name="T">The Type to validate</typeparam>
         /// <param name="validator">The validator</param>
-        /// <returns>Returns the Instance of <see cref="Validator{T}"/> with <see cref="Validator{T}.EnableCaching"/> set on true</returns>
-        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="Validator{T}"/> is null</exception>
-        public static Validator<T> EnableCaching<T>(this Validator<T> validator)
+        /// <returns>Returns the Instance of <see cref="SingleObjectValidator{T}"/> with <see cref="SingleObjectValidator{T}.EnableCaching"/> set on true</returns>
+        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="SingleObjectValidator{T}"/> is null</exception>
+        public static SingleObjectValidator<T> EnableCaching<T>(this SingleObjectValidator<T> validator)
         {
             if (validator == null)
             {
@@ -33,9 +33,9 @@ namespace ValidationFramework
         /// </summary>
         /// <typeparam name="T">The Type to validate</typeparam>
         /// <param name="validator">The validator</param>
-        /// <returns>Returns the Instance of <see cref="Validator{T}"/> with <see cref="Validator{T}.EnableCaching"/> set on false</returns>
-        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="Validator{T}"/> is null</exception>
-        public static Validator<T> DisableCaching<T>(this Validator<T> validator)
+        /// <returns>Returns the Instance of <see cref="SingleObjectValidator{T}"/> with <see cref="SingleObjectValidator{T}.EnableCaching"/> set on false</returns>
+        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="SingleObjectValidator{T}"/> is null</exception>
+        public static SingleObjectValidator<T> DisableCaching<T>(this SingleObjectValidator<T> validator)
         {
             if (validator == null)
             {
@@ -52,9 +52,9 @@ namespace ValidationFramework
         /// </summary>
         /// <typeparam name="T">The Type to validate</typeparam>
         /// <param name="validator">The validator</param>
-        /// <returns>Returns the Instance of <see cref="Validator{T}"/> with <see cref="Validator{T}.ReturnOnlyErrors"/> set on true</returns>
-        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="Validator{T}"/> is null</exception>
-        public static Validator<T> EnableReturnOnlyErrors<T>(this Validator<T> validator)
+        /// <returns>Returns the Instance of <see cref="SingleObjectValidator{T}"/> with <see cref="SingleObjectValidator{T}.ReturnOnlyErrors"/> set on true</returns>
+        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="SingleObjectValidator{T}"/> is null</exception>
+        public static SingleObjectValidator<T> EnableReturnOnlyErrors<T>(this SingleObjectValidator<T> validator)
         {
             if (validator == null)
             {
@@ -71,9 +71,9 @@ namespace ValidationFramework
         /// </summary>
         /// <typeparam name="T">The Type to validate</typeparam>
         /// <param name="validator">The validator</param>
-        /// <returns>Returns the Instance of <see cref="Validator{T}"/> with <see cref="Validator{T}.ReturnOnlyErrors"/> set on false</returns>
-        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="Validator{T}"/> is null</exception>
-        public static Validator<T> DisableReturnOnlyErrors<T>(this Validator<T> validator)
+        /// <returns>Returns the Instance of <see cref="SingleObjectValidator{T}"/> with <see cref="SingleObjectValidator{T}.ReturnOnlyErrors"/> set on false</returns>
+        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="SingleObjectValidator{T}"/> is null</exception>
+        public static SingleObjectValidator<T> DisableReturnOnlyErrors<T>(this SingleObjectValidator<T> validator)
         {
             if (validator == null)
             {
@@ -86,15 +86,15 @@ namespace ValidationFramework
         }
 
         /// <summary>
-        /// Adds a new <see cref="AbstractValidation{T}"/> to the <see cref="Validator{T}" />
+        /// Adds a new <see cref="AbstractValidation{T}"/> to the <see cref="SingleObjectValidator{T}" />
         /// </summary>
         /// <typeparam name="T">The Type to validate</typeparam>
         /// <param name="validator">The validator</param>
         /// <param name="validation">The validation to add</param>
-        /// <returns>Returns the Instance of <see cref="Validator{T}"/></returns>
-        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="Validator{T}"/> is null</exception>
-        public static Validator<T> Add<T>(
-            this Validator<T> validator,
+        /// <returns>Returns the Instance of <see cref="SingleObjectValidator{T}"/></returns>
+        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="SingleObjectValidator{T}"/> is null</exception>
+        public static SingleObjectValidator<T> Add<T>(
+            this SingleObjectValidator<T> validator,
             AbstractValidation<T> validation)
         {
             if (validator == null)
@@ -108,15 +108,15 @@ namespace ValidationFramework
         }
 
         /// <summary>
-        /// Adds a <see cref="IEnumerable{AbstractValidation}"/> to the <see cref="Validator{T}" />
+        /// Adds a <see cref="IEnumerable{AbstractValidation}"/> to the <see cref="SingleObjectValidator{T}" />
         /// </summary>
         /// <typeparam name="T">The Type to validate</typeparam>
         /// <param name="validator">The validator</param>
         /// <param name="validations">The validations to add</param>
-        /// <returns>Returns the Instance of <see cref="Validator{T}"/></returns>
-        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="Validator{T}"/> is null</exception>
-        public static Validator<T> Add<T>(
-            this Validator<T> validator,
+        /// <returns>Returns the Instance of <see cref="SingleObjectValidator{T}"/></returns>
+        /// <exception cref="InvalidOperationException">Occurs if the instance of <see cref="SingleObjectValidator{T}"/> is null</exception>
+        public static SingleObjectValidator<T> Add<T>(
+            this SingleObjectValidator<T> validator,
             IEnumerable<AbstractValidation<T>> validations)
         {
             if (validator == null)

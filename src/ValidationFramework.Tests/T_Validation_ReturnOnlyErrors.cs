@@ -31,7 +31,7 @@ namespace ValidationFramework.Tests
         [InlineData(false, true, 6, 2)]
         public void Test_ReturnOnlyErrors_2_Validierungen(bool returnOnlyError, bool enableCaching, int inputValue, int expectedCount)
         {
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
             {
                 ReturnOnlyErrors = returnOnlyError,
                 EnableCaching = enableCaching

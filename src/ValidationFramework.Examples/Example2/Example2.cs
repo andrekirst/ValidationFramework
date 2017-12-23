@@ -16,7 +16,7 @@ namespace ValidationFramework.Examples.Example2
             Console.WriteLine($"Simple example to validate an integer value with an validation in a seperate class. If the value is smaller than 3 then occurs a error.");
 
             // Create new Validator with type int
-            Validator<int> validator = new Validator<int>()
+            SingleObjectValidator<int> validator = new SingleObjectValidator<int>()
                 // Add a new validation
                 .Add(new ValidationCheckIntValueEqualOrGreatherThan3());
 
