@@ -40,8 +40,7 @@ before_build:
 build_script:
   - ps: MSBuild.SonarQube.Runner.exe begin /n:"ValidationFramework" /k:"andrekirst:ValidationFramework" /d:"sonar.organization=andrekirst-github" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:SONARQUBE_TOKEN)" /v:"$($env:appveyor_build_version)" /d:sonar.dotnet.visualstudio.testProjectPattern="*.Tests;*.UnitTests" /d:sonar.cs.vstest.reportsPath="c:\projects\validationframework\opencovertests.trx" /d:"sonar.exclusions=c:\projects\validationframework\src\ValidationFramework.Tests\*" /d:"sonar.links.homepage=https://github.com/andrekirst/ValidationFramework" /d:"sonar.links.issues=https://github.com/andrekirst/ValidationFramework/issues"
   - dotnet build c:\projects\validationframework\src\ValidationFramework.sln -c Release
-  - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release --logger "trx;LogFileName=c:\projects\validationframework\opencovertests.trx"
   - ps: MSBuild.SonarQube.Runner.exe end /d:"sonar.login=$($env:SONARQUBE_TOKEN)"
 
-#test_script:
-  
+test_script:
+  - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release --no-build
