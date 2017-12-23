@@ -139,7 +139,7 @@ namespace ValidationFramework
                 {
                     int hashCode = originalValue.GetHashCode();
 
-                    string cacheKey = $"[{validation.Name}][{hashCode}]";
+                    string cacheKey = GenerateCacheKey(validation, hashCode);
 
                     if (Cache.ContainsKey(key: cacheKey))
                     {
@@ -173,6 +173,11 @@ namespace ValidationFramework
             }
 
             return responses.AsReadOnly();
+        }
+
+        private string GenerateCacheKey(AbstractValidation<T> validation, int hashCode)
+        {
+            return $"[{validation.Name}][{hashCode}]";
         }
 
         /// <inheritdoc />
