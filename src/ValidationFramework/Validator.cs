@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace ValidationFramework
 {
+    /// <summary>
+    /// Validator-Klasse für die Überprüfung eines Objektes für den Typ <see cref="T"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Validator<T>
     {
         private readonly List<AbstractValidation<T>> _validations = new List<AbstractValidation<T>>();
@@ -58,20 +62,6 @@ namespace ValidationFramework
             return ValidateWithFilter(
                 value: value,
                 wherePredicate: wherePredicate);
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<ValidationResponse> ValidateList(IEnumerable<T> values)
-        {
-            foreach (T value in values)
-            {
-                IEnumerable<ValidationResponse> responses = ValidateSingleValue(value: value);
-
-                foreach (ValidationResponse response in responses)
-                {
-                    yield return response;
-                }
-            }
         }
 
         /// <inheritdoc />
@@ -197,12 +187,6 @@ namespace ValidationFramework
             {
                 AddValidation(validation: validation);
             }
-        }
-
-        /// <inheritdoc />
-        public void ClearValidations()
-        {
-            _validations.Clear();
         }
 
         private void OnCacheItemAdded(CacheItemAddedEventArgs<T> eventArgs)
