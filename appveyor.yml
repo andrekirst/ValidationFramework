@@ -43,4 +43,4 @@ build_script:
   - ps: MSBuild.SonarQube.Runner.exe end /d:"sonar.login=$($env:SONARQUBE_TOKEN)"
 
 test_script:
-  - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release --no-build
+  - dotnet test c:\projects\validationframework\src\ValidationFramework.Tests\ValidationFramework.Tests.csproj -c Release
