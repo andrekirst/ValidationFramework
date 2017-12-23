@@ -92,13 +92,12 @@ namespace ValidationFramework
             {
                 bool valid = validation.IsValid(value: value);
 
-                if ((!valid && ReturnOnlyErrors) || !ReturnOnlyErrors)
-                {
-                    responses.Add(item: CreateValidationResponse(
-                        valid: valid,
-                        validation: validation,
-                        value: value));
-                }
+                AddResponse(
+                    valid: valid,
+                    returnOnlyErrors: ReturnOnlyErrors,
+                    validation: validation,
+                    value: value,
+                    responses: responses);
             }
 
             return responses.AsReadOnly();
@@ -130,16 +129,11 @@ namespace ValidationFramework
             {
                 object originalValue = validation.OriginalValue(arg: value);
 
+                bool valid = false;
+
                 if (originalValue == null)
                 {
-                    bool valid = validation.IsValid(value: value);
-
-                    AddResponse(
-                        valid: valid,
-                        returnOnlyErrors: ReturnOnlyErrors,
-                        validation: validation,
-                        value: value,
-                        responses: responses);
+                    valid = validation.IsValid(value: value);
                 }
                 else
                 {
@@ -149,24 +143,17 @@ namespace ValidationFramework
 
                     if (Cache.ContainsKey(key: cacheKey))
                     {
-                        bool valid = Cache[key: cacheKey];
+                        valid = Cache[key: cacheKey];
 
                         OnCacheItemUsed(eventArgs: new CacheItemUsedEventArgs<T>(
                                                 cacheKey: cacheKey,
                                                 originalValue: originalValue,
                                                 valid: valid,
                                                 validation: validation));
-
-                        AddResponse(
-                            valid: valid,
-                            returnOnlyErrors: ReturnOnlyErrors,
-                            validation: validation,
-                            value: value,
-                            responses: responses);
                     }
                     else
                     {
-                        bool valid = validation.IsValid(value: value);
+                        valid = validation.IsValid(value: value);
                         Cache.Add(key: cacheKey, value: valid);
 
                         OnCacheItemAdded(eventArgs: new CacheItemAddedEventArgs<T>(
@@ -174,15 +161,15 @@ namespace ValidationFramework
                                                 originalValue: originalValue,
                                                 valid: valid,
                                                 validation: validation));
-
-                        AddResponse(
-                            valid: valid,
-                            returnOnlyErrors: ReturnOnlyErrors,
-                            validation: validation,
-                            value: value,
-                            responses: responses);
                     }
                 }
+
+                AddResponse(
+                    valid: valid,
+                    returnOnlyErrors: ReturnOnlyErrors,
+                    validation: validation,
+                    value: value,
+                    responses: responses);
             }
 
             return responses.AsReadOnly();
